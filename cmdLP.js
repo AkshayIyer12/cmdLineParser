@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-let path = process.argv[1].split('').reverse()
+let splitPath = process.argv[1].split('').reverse()
 let $0 = []
-const pather = () => {
+const chopPath = () => {
   let i = 0
-  while (path[i] !== '/') {
-    $0.push(path[i])
+  while (splitPath[i] !== '/') {
+    $0.push(splitPath[i])
     i++
   }
   return $0.reverse().join('')
@@ -13,7 +13,7 @@ let arg = process.argv.slice(2)
 let mapper = new Map()
 let arr = []
 mapper.set('_', arr)
-mapper.set('$0', pather(path))
+mapper.set('$0', chopPath(splitPath))
 const removeDash = arg.map((flag) => {
   if (flag[0] !== '-') arr.push(flag)
   if ((flag[0] === '-') && (flag[1] === '-')) {
@@ -33,7 +33,7 @@ const getValue = removeDash.map((value) => {
       if (value[i] !== '=') {
         key.push(value[i])
       }
-      if (value[i] === '=') {
+      if (value[i] === '=' || value[i] === ' ') {
         value = value.slice(i + 1)
         break
       }
@@ -46,5 +46,6 @@ for (let i = 0; i < keyRing.length; i++) {
   mapper.set(keyRing[i], getValue[i])
 }
 console.log(mapper)
+if (mapper.get('ships') > 3 && mapper.get('distance') < 50) { console.log('It worked!!!') } else { console.log('It failed!!!') }
 // const replaceColon = removeDash.map((flag) => flag.replace(/=/g, ':'))
 // console.log(Object.keys(replaceColon))
