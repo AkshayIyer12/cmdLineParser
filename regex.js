@@ -13,8 +13,9 @@ process.argv.slice(2).map((a, i) => {
     return map.set('_', arr)
   }
   let e = /[a-z]+|[0-9]+/ig.exec(a)
-  if (/^(-){1,2}([a-z]+)$/ig.exec(process.argv[2 + i - 1]) !== null)
+  if (/^(-){1,2}([a-z]+)$/ig.exec(process.argv[2 + i - 1]) !== null) {
     return map.set(/^(-){1,2}([a-z]+)$/ig.exec(process.argv[2 + i - 1])[2], e[0])
+  }
   arr.push(e[0])
   return map.set('_', arr)
 })
