@@ -17,11 +17,13 @@ process.argv.slice(2).map((a, i) => {
   }
   // For catching value if expression flag is separated by space --a 4
   let e = /[a-z]+|[0-9]+/ig.exec(a)
+  // For catching earlier value if it's in the format --flag
   let f = /^(-){1,2}([a-z]+)$/ig.exec(process.argv[2 + i - 1])
   if (f !== null) {
     if (e[0].length === a.length) {
       return map.set(f[2], e[0])
     }
+    // For catching links like https://github.com http://github.com www.google.com
     let g = /^((https:\/\/){0,1}|(https:\/\/){0,1}(w){3}[.]{1}|(http:\/\/){0,1}|(w){3}[.]{1})([a-z]+[.]{1})([a-z]{3})$/ig.exec(a)
     if (g !== null) {
       return map.set(f[2], g[0])
@@ -32,6 +34,7 @@ process.argv.slice(2).map((a, i) => {
     arr.push(e[0])
     return map.set('_', arr)
   }
+  // For catching filename with extension
   let h = /^(([a-z]+[0-9]*(.))|(.))*((.){1}([a-z]+[0-9]?){1})$/ig.exec(a)
   if (h !== null) {
     arr.push(h[0])
