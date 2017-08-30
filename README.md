@@ -1,4 +1,7 @@
 # cmdLineParser
+
+[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
+
 The commandLineParser takes it's input from the process.argv .
 The input has to be in a specific format:
 --flag=value
@@ -18,6 +21,8 @@ The arbitrary value is added to '_' which is an array.
 The commands are also taken as arbitrary value and added to the '_' array.
 
 The commandLineParser can also parse links and filename with extensions which are appended to the '_' array.
+
+The filename being executed is linked to $0 in the map object.
 
 To run the file you need to ./filename.js in your unix terminal.
 
