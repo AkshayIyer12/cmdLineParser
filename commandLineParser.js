@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 let map = new Map()
 let arr = []
 process.argv.slice(2).map((a, i) => {
