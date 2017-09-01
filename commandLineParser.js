@@ -31,29 +31,24 @@ const parseFlagSeparatedSpace = (data, i) => {
   }
   return null
 }
+const fillArray = data => {
+  arr.push(data)
+  return map.set('_', arr)
+}
 
 const parseArbitraryExp = (data) => {
   let e = /[a-z]+|[0-9]+/ig.exec(data)
-  if (e[0].length === data.length) {
-    arr.push(e[0])
-    return map.set('_', arr)
-  }
+  if (e[0].length === data.length) return fillArray(e[0])
   return null
 }
 const parseArbitraryExpEQ = data => {
   let d = /^([a-z]+)(=){1}([\d]+|[a-z]+)$/ig.exec(data)
-  if (d !== null) {
-    arr.push(d[0])
-    return map.set('_', arr)
-  }
+  if (d !== null) return fillArray(d[0])
   return null
 }
 const parseFilename = (data) => {
   let h = /^(([a-z]+[0-9]*(.))|(.))*((.){1}([a-z]+[0-9]?){1})$/ig.exec(data)
-  if (h !== null) {
-    arr.push(h[0])
-    return map.set('_', arr)
-  }
+  if (h !== null) return fillArray(h[0])
   return null
 }
 process.argv.slice(2).map((a, i) => {
