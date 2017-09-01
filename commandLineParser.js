@@ -60,4 +60,6 @@ process.argv.slice(2).map((a, i) => {
   if (parseArbitraryExp(a)) return
   return parseFilename(a)
 })
-console.log(map.set('$0', require('path').basename(process.argv[1])))
+map.set('$0', require('path').basename(process.argv[1]))
+let mapAsc = new Map([...map.entries()].sort())
+console.log(mapAsc)
