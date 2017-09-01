@@ -36,7 +36,7 @@ const fillArray = data => {
   return map.set('_', arr)
 }
 
-const parseArbitraryExp = (data) => {
+const parseArbitraryExp = data => {
   let e = /[a-z]+|[0-9]+/ig.exec(data)
   if (e[0].length === data.length) return fillArray(e[0])
   return null
@@ -46,7 +46,7 @@ const parseArbitraryExpEQ = data => {
   if (d !== null) return fillArray(d[0])
   return null
 }
-const parseFilename = (data) => {
+const parseFilename = data => {
   let h = /^(([a-z]+[0-9]*(.))|(.))*((.){1}([a-z]+[0-9]?){1})$/ig.exec(data)
   if (h !== null) return fillArray(h[0])
   return null
