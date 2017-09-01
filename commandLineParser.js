@@ -10,6 +10,7 @@ const parseFlag = (a, b) => {
 const parseFlagEqVal = data => {
   let b = /^(-){1,2}([a-z]+)(=){1}([\d]+|[a-z]+)$/ig.exec(data)
   if (b !== null) return parseFlag(b[2], b[4])
+  return null
 }
 const parseDashFlag = data => {
   let c = /^(-){1,2}([a-z]+)$/ig.exec(data)
