@@ -19,6 +19,7 @@ const parseDashFlag = data => {
     }
     return map.set(c[2], map.get(c[2]))
   }
+  return null
 }
 const parseFlagSeparatedSpace = (data, i) => {
   let e = /[a-z]+|[0-9]+/ig.exec(data)
@@ -28,6 +29,7 @@ const parseFlagSeparatedSpace = (data, i) => {
     let g = /^((https:\/\/){0,1}|(https:\/\/){0,1}(w){3}[.]{1}|(http:\/\/){0,1}|(w){3}[.]{1})([a-z]+[.]{1})([a-z]{3})$/ig.exec(data)
     if (g !== null) return map.set(f[2], g[0])
   }
+  return null
 }
 
 const parseArbitraryExp = (data) => {
@@ -36,6 +38,7 @@ const parseArbitraryExp = (data) => {
     arr.push(e[0])
     return map.set('_', arr)
   }
+  return null
 }
 const parseArbitraryExpEQ = data => {
   let d = /^([a-z]+)(=){1}([\d]+|[a-z]+)$/ig.exec(data)
@@ -43,6 +46,7 @@ const parseArbitraryExpEQ = data => {
     arr.push(d[0])
     return map.set('_', arr)
   }
+  return null
 }
 const parseFilename = (data) => {
   let h = /^(([a-z]+[0-9]*(.))|(.))*((.){1}([a-z]+[0-9]?){1})$/ig.exec(data)
@@ -50,6 +54,7 @@ const parseFilename = (data) => {
     arr.push(h[0])
     return map.set('_', arr)
   }
+  return null
 }
 process.argv.slice(2).map((a, i) => {
   if (parseFlagEqVal(a)) return
