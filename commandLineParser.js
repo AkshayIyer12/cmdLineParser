@@ -7,24 +7,47 @@ const parseFlag = (a, b) => {
   tempVal.push(b)
   return map.set(a, tempVal)
 }
-process.argv.slice(2).map((a, i) => {
-  // For catching expression flags like --a=4
-  let b = /^(-){1,2}([a-z]+)(=){1}([\d]+|[a-z]+)$/ig.exec(a)
-  if (b !== null) parseFlag(b[2], b[4])
-  // For catching expression flags like --a
-  let c = /^(-){1,2}([a-z]+)$/ig.exec(a)
+const parseFlagEqVal = data => {
+  let b = /^(-){1,2}([a-z]+)(=){1}([\d]+|[a-z]+)$/ig.exec(data)
+  if (b !== null) return parseFlag(b[2], b[4])
+}
+const parseDoubleDashFlag = data => {
+  let c = /^(-){1,2}([a-z]+)$/ig.exec(data)
   if (c !== null) {
     if (map.get(c[2]) === undefined) {
       return map.set(c[2], [])
     }
     return map.set(c[2], map.get(c[2]))
   }
-  // For catching expression arbitrary a=4
-  let d = /^([a-z]+)(=){1}([\d]+|[a-z]+)$/ig.exec(a)
+}
+const parseArbitraryExp = data => {
+  let d = /^([a-z]+)(=){1}([\d]+|[a-z]+)$/ig.exec(data)
   if (d !== null) {
     arr.push(d[0])
     return map.set('_', arr)
   }
+}
+process.argv.slice(2).map((a, i) => {
+  // For catching expression flags like --a=4
+  // let b = /^(-){1,2}([a-z]+)(=){1}([\d]+|[a-z]+)$/ig.exec(a)
+  // if (b !== null) parseFlag(b[2], b[4])
+  if (parseFlagEqVal(a)) return
+  // // For catching expression flags like --a
+  // let c = /^(-){1,2}([a-z]+)$/ig.exec(a)
+  // if (c !== null) {
+  //   if (map.get(c[2]) === undefined) {
+  //     return map.set(c[2], [])
+  //   }
+  //   return map.set(c[2], map.get(c[2]))
+  // }
+  if (parseDoubleDashFlag(a)) return
+  // For catching expression arbitrary a=4
+  // let d = /^([a-z]+)(=){1}([\d]+|[a-z]+)$/ig.exec(a)
+  // if (d !== null) {
+  //   arr.push(d[0])
+  //   return map.set('_', arr)
+  // }
+  if (parseArbitraryExp(a)) return
   // For catching value if expression flag is separated by space --a 4
   let e = /[a-z]+|[0-9]+/ig.exec(a)
   // For catching earlier value if it's in the format --flag
