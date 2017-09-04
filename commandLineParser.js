@@ -2,7 +2,7 @@
 let map = new Map()
 let arr = []
 const parseFlag = (a, b) => {
-  if (map.get(a) === undefined) map.set(a, [])
+  if (map.get(a) === undefined || map.get(a) === true) map.set(a, [])
   let tempVal = map.get(a)
   tempVal.push(b)
   return map.set(a, tempVal)
@@ -16,7 +16,7 @@ const parseDashFlag = data => {
   let c = /^(-){1,2}([a-z]+)$/ig.exec(data)
   if (c !== null) {
     if (map.get(c[2]) === undefined) {
-      return map.set(c[2], [])
+      return map.set(c[2], true)
     }
     return map.set(c[2], map.get(c[2]))
   }
