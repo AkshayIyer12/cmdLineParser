@@ -1,32 +1,51 @@
 #!/usr/bin/env node
 let map = new Map()
 let arr = []
-const parseFlag = (a, b) => {
-  if (map.get(a) === undefined || map.get(a) === true) map.set(a, [])
-  let tempVal = map.get(a)
-  tempVal.push(b)
-  return map.set(a, tempVal)
+let obj = {}
+const setValue = (a, b) => {
+  if (map.get(a) === undefined || map.get(a) === true) {
+    obj[a] = [b]
+    return map.set(a, b)
+  }
+  if (obj[a]) {
+    obj[a].push(b)
+  }
+  // console.log(obj)
+  return map.set(a, obj[a])
+  // let tempVal
+  // console.log(...map.get(a))
+  // if(typeof map.get(a) === 'string') tempVal = map.get(a)
+  // else{
+  // 	tempVal = [tempVal, ...map.get(a)]
+  //} 
+
+  //let tempVal = [...map.get(a)]
+  //tempVal.push(map.get(a))
+  // tempVal.push(b)
+  // return map.set(a, tempVal)
 }
-const parseFlagEqVal = data => {
+const flagValue = data => {
   let b = /^(-){1,2}([a-z]+)(=){1}([\d]+|[a-z]+)$/ig.exec(data)
-  if (b !== null) return parseFlag(b[2], b[4])
+  if (b !== null) return setValue(b[2], b[4])
   return null
 }
-const parseDashFlag = data => {
+const flag = (data, i) => {
   let c = /^(-){1,2}([a-z]+)$/ig.exec(data)
+  let e = /[a-z]+|[0-9]+/ig.exec(process.argv[2 + i + 1])
+
   if (c !== null) {
     if (map.get(c[2]) === undefined) {
-      return map.set(c[2], true)
+      map.set(c[2], true)
+      if (e === null) return
     }
+    return setValue(c[2], e[0])
     return map.set(c[2], map.get(c[2]))
   }
   return null
 }
-const parseFlagSeparatedSpace = (data, i) => {
-  let e = /[a-z]+|[0-9]+/ig.exec(data)
+const links = (data, i) => {
   let f = /^(-){1,2}([a-z]+)$/ig.exec(process.argv[2 + i - 1])
   if (f !== null) {
-    if (e[0].length === data.length) return parseFlag(f[2], e[0])
     let g = /^((https:\/\/){0,1}|(https:\/\/){0,1}(w){3}[.]{1}|(http:\/\/){0,1}|(w){3}[.]{1})([a-z]+[.]{1})([a-z]{3})$/ig.exec(data)
     if (g !== null) return map.set(f[2], g[0])
   }
@@ -37,28 +56,31 @@ const fillArray = data => {
   return map.set('_', arr)
 }
 
-const parseArbitraryExp = data => {
+const arbitraryValue = (data, i) => {
+  let f = /^(-){1,2}([a-z]+)$/ig.exec(process.argv[2 + i - 1])
   let e = /[a-z]+|[0-9]+/ig.exec(data)
+  if (f === null) {
   if (e[0].length === data.length) return fillArray(e[0])
+  }
   return null
 }
-const parseArbitraryExpEQ = data => {
+const arbitraryExp = data => {
   let d = /^([a-z]+)(=){1}([\d]+|[a-z]+)$/ig.exec(data)
   if (d !== null) return fillArray(d[0])
   return null
 }
-const parseFilename = data => {
+const fileName = data => {
   let h = /^(([a-z]+[0-9]*(.))|(.))*((.){1}([a-z]+[0-9]?){1})$/ig.exec(data)
   if (h !== null) return fillArray(h[0])
   return null
 }
 process.argv.slice(2).map((a, i) => {
-  if (parseFlagEqVal(a)) return
-  if (parseDashFlag(a)) return
-  if (parseArbitraryExpEQ(a)) return
-  if (parseFlagSeparatedSpace(a, i)) return
-  if (parseArbitraryExp(a)) return
-  return parseFilename(a)
+   if (flagValue(a)) return
+   if (flag(a, i)) return
+   if (arbitraryExp(a)) return
+   if (links(a, i)) return
+   if (arbitraryValue(a, i)) return
+   return fileName(a)
 })
 map.set('$0', require('path').basename(process.argv[1]))
 let mapAsc = new Map([...map.entries()].sort())
